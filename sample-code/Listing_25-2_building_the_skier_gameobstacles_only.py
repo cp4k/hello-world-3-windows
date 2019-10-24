@@ -7,13 +7,13 @@ import pygame, sys, random
 
 # Class for obstacle sprites (trees and flags)
 class ObstacleClass(pygame.sprite.Sprite):
-    def __init__(self, image_file, location, type):
+    def __init__(self, image_file, location, obs_type):
         pygame.sprite.Sprite.__init__(self)
         self.image_file = image_file
         self.image = pygame.image.load(image_file)
         self.rect = self.image.get_rect()
         self.rect.center = location
-        self.type = type
+        self.obs_type = obs_type
         self.passed = False
 
     def update(self):
