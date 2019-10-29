@@ -22,7 +22,9 @@ class Client:
         self.username = None
 
         socket.setblocking(False)
-        socket.send(b'Welcome to the chat server!\r\nPlease enter a username:\r\n')
+        msg = b'Welcome to the chat server!\r\n'
+        msg += b'Please enter a username:\r\n'
+        socket.send(msg)
 
     # We'll call this when there's more data to read or the client has closed the connection
     def receive_data(self):
@@ -44,16 +46,18 @@ class Client:
         global client_objects
         if self.username == None:
             self.username = command
-            self.socket.send(b'Hi, ' + self.username + b'! Type a message and press Enter to send it.\r\n')
+            msg = b'Hi, ' + self.username + b'!'
+            msg += b' Type a message and press Enter to send it.\r\n'
+            self.socket.send(msg)
         elif command == b'/quit':
             self.close_connection()
         else:
-            message_to_send = b'[' + self.username + b']: ' + command + b'\r\n'
+            msg = b'[' + self.username + b']: ' + command + b'\r\n'
             # Send the message to everyone else on the server
             for client_object in client_objects.values():
                 if client_object == self or client_object.username == None:
                     continue
-                client_object.socket.send(message_to_send)
+                client_object.socket.send(msg)
 
     def close_connection(self):
         global client_sockets, client_objects
@@ -62,8 +66,8 @@ class Client:
         self.socket.close()
 
 while True:
-    ready_for_reading = select.select([server_socket] + client_sockets, [], [])[0]  # Wait for something to happen with one of our sockets
-    for sock in ready_for_reading:
+    ready_to_read = select.select([server_socket] + client_sockets, [], [])[0]  # Wait for something to happen with one of our sockets
+    for sock in ready_to_read:
         if sock == server_socket:
             # Runs when the server gets a *new* connection
             new_connection, address = sock.accept()

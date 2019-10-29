@@ -36,8 +36,8 @@ while running:
 
     screen.fill(bg_color)
     # Draw the text on the bottom of the screen
-    typing_surface = font.render(typing_text, True, text_color, bg_color)
-    screen.blit(typing_surface, (0, screen_height - typing_surface.get_height()))
+    typing_surf = font.render(typing_text, True, text_color, bg_color)
+    screen.blit(typing_surf, (0, screen_height - typing_surf.get_height()))
     pygame.display.flip()
 
 pygame.quit()

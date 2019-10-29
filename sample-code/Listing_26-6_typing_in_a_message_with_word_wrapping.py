@@ -19,29 +19,29 @@ pygame.key.set_repeat(300, 100)
 def message_to_surface(message):
     words = message.split(' ')
 
-    word_surfaces = []
+    word_surfs = []
     word_locations = []
     word_x = 0
     word_y = 0
     text_height = 0
 
     for word in words:
-        word_surface = font.render(word, True, text_color, bg_color)  # Create a surface with just one word
+        word_surf = font.render(word, True, text_color, bg_color)  # Create a surface with just one word
         # If the word is too wide to fit on the current line, move to the next line
-        if word_x + word_surface.get_width() > screen_width:
+        if word_x + word_surf.get_width() > screen_width:
             word_x = 0
             word_y = text_height
-        word_surfaces.append(word_surface)
+        word_surfs.append(word_surf)
         word_locations.append((word_x, word_y))
-        word_x += word_surface.get_width() + space_character_width  # Add a space between this word and the next one
-        if word_y + word_surface.get_height() > text_height:
-            text_height = word_y + word_surface.get_height()
+        word_x += word_surf.get_width() + space_character_width  # Add a space between this word and the next one
+        if word_y + word_surf.get_height() > text_height:
+            text_height = word_y + word_surf.get_height()
 
     # Draw all of the word surfaces onto a single big surface
     surf = pygame.Surface((screen_width, text_height))
     surf.fill(bg_color)
     for i in range(len(words)):
-        surf.blit(word_surfaces[i], word_locations[i])
+        surf.blit(word_surfs[i], word_locations[i])
     return surf
 
 typing_text = ""
@@ -64,8 +64,8 @@ while running:
                 typing_text += event.unicode
 
     screen.fill(bg_color)
-    typing_surface = message_to_surface(typing_text)  # Change this line to call our new text drawing function
-    screen.blit(typing_surface, (0, screen_height - typing_surface.get_height()))
+    typing_surf = message_to_surface(typing_text)  # Change this line to call our new text drawing function
+    screen.blit(typing_surf, (0, screen_height - typing_surf.get_height()))
     pygame.display.flip()
 
 pygame.quit()

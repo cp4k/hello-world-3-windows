@@ -24,39 +24,37 @@ pygame.key.set_repeat(300, 100)
 def message_to_surface(message):
     words = message.split(' ')
 
-    word_surfaces = []
+    word_surfs = []
     word_locations = []
     word_x = 0
     word_y = 0
     text_height = 0
 
     for word in words:
-        word_surface = font.render(word, True, text_color, bg_color)
-        if word_x + word_surface.get_width() > screen_width:
+        word_surf = font.render(word, True, text_color, bg_color)
+        if word_x + word_surf.get_width() > screen_width:
             word_x = 0
             word_y = text_height
-        word_surfaces.append(word_surface)
+        word_surfs.append(word_surf)
         word_locations.append((word_x, word_y))
-        word_x += word_surface.get_width() + space_character_width
-        if word_y + word_surface.get_height() > text_height:
-            text_height = word_y + word_surface.get_height()
+        word_x += word_surf.get_width() + space_character_width
+        if word_y + word_surf.get_height() > text_height:
+            text_height = word_y + word_surf.get_height()
 
     surf = pygame.Surface((screen_width, text_height))
     surf.fill(bg_color)
     for i in range(len(words)):
-        surf.blit(word_surfaces[i], word_locations[i])
+        surf.blit(word_surfs[i], word_locations[i])
     return surf
 
-typing_text = ""
 # New code to keep track of past messages
-message_surfaces = []
+message_surfs = []
 
 def add_message(message):
-    if len(message_surfaces) > 50:
-        message_surfaces.pop(0)
-    message_surfaces.append(message_to_surface(message))
+    if len(message_surfs) > 50:
+        message_surfs.pop(0)
+    message_surfs.append(message_to_surface(message))
 
-running = True
 # New code to read from the socket
 text_from_socket = b''
 def read_from_socket():
@@ -82,18 +80,20 @@ def read_from_socket():
 def redraw_screen():
     screen.fill(bg_color)
 
-    typing_surface = message_to_surface("> " + typing_text)
-    y = screen_height - typing_surface.get_height()
-    screen.blit(typing_surface, (0, y))
+    typing_surf = message_to_surface("> " + typing_text)
+    y = screen_height - typing_surf.get_height()
+    screen.blit(typing_surf, (0, y))
 
-    message_index = len(message_surfaces) - 1
+    message_index = len(message_surfs) - 1
     while y > 0 and message_index >= 0:
-        message_surface = message_surfaces[message_index]
+        message_surf = message_surfs[message_index]
         message_index -= 1
-        y -= message_surface.get_height() + message_spacing
-        screen.blit(message_surface, (0, y))
+        y -= message_surf.get_height() + message_spacing
+        screen.blit(message_surf, (0, y))
     pygame.display.flip()
 
+running = True
+typing_text = ""
 clock = pygame.time.Clock()
 
 while running:
