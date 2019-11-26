@@ -5,10 +5,10 @@
 
 import socket
 
-connection = socket.create_connection(('helloworldbookblog.com', 80))  # Open the socket connection to the server
+connection = socket.create_connection(('helloworldbook3.com', 80))  # Open the socket connection to the server
 # Ask the server to send us the secret message
-connection.sendall('GET / HTTP/1.1\r\n'.encode('utf-8'))
-connection.sendall(b'Host: helloworldbookblog.com\r\n\r\n')
+connection.sendall('GET /data/message.txt HTTP/1.0\r\n'.encode('utf-8'))
+connection.sendall(b'Host: helloworldbook3.com\r\n\r\n')
 
 # Receive the message the server sends back
 response = bytes()
